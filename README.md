@@ -1,4 +1,4 @@
-# Jelly Blower - Match 3 Clone
+# Jello Masher - Match 3 Clone
 
 This is a simple match-3 clone, made for portfolio related learning purposes. The game itself is merely a template version for another Match 3 game, since all match-3 are following the same basics.
 
