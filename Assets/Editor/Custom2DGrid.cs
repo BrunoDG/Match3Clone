@@ -40,6 +40,6 @@ public class Custom2DGrid : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return 18f * 9;
+        return 18f * 8;
     }
 }

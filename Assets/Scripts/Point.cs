@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 public class Point
 {
@@ -52,4 +53,40 @@ public class Point
     {
         return new Point(p.x, p.y);
     }
+
+    /// <summary>
+    /// Coordinates for positions
+    /// Zero, One, Up, Down, Left, Right
+    /// </summary>
+
+    public static Point Zero
+    {
+        get { return new Point(0,0); }
+    }
+
+    public static Point One
+    {
+        get { return new Point(1, 1); }
+    }
+
+    public static Point Up
+    {
+        get { return new Point(0, 1); }
+    }
+
+    public static Point Down
+    {
+        get { return new Point(0, -1); }
+    }
+
+    public static Point Left
+    {
+        get { return new Point(-1, 0); }
+    }
+
+    public static Point Right
+    {
+        get { return new Point(1, 0); }
+    }
+
 }

@@ -11,5 +11,5 @@ public class ArrayLayout
     }
 
     public Grid grid;
-    public RowData[] rows = new RowData[16]; //Grid of 8x8
+    public RowData[] rows = new RowData[8]; //Grid of 8x8
 }
