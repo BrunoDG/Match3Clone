@@ -80,7 +80,7 @@ public class GameLogic : MonoBehaviour
                 GameObject p = Instantiate(nodePiece, gameBoard);
                 NodePiece node = p.GetComponent<NodePiece>();
                 RectTransform rect = p.GetComponent<RectTransform>();
-                rect.anchoredPosition = new Vector2(32 + (64 * x), -32 - (64 * y));
+                rect.anchoredPosition = new Vector2(36 + (72 * x), -36 - (72 * y));
                 node.Initialize(val, new Point(x, y), pieces[val - 1]);
             }
         }
@@ -197,7 +197,7 @@ public class GameLogic : MonoBehaviour
             }
         }
 
-        if (connected.Count > 0) connected.Add(p);
+        //if (connected.Count > 0) connected.Add(p);
 
         return connected;
     }
@@ -208,7 +208,7 @@ public class GameLogic : MonoBehaviour
         {
             bool doAdd = true;
             
-            for (int i = 0; i < add.Count; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 if (points[i].Equals(p))
                 {

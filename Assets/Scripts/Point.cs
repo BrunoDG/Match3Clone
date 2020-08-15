@@ -79,14 +79,14 @@ public class Point
         get { return new Point(0, -1); }
     }
 
-    public static Point Left
-    {
-        get { return new Point(-1, 0); }
-    }
-
     public static Point Right
     {
         get { return new Point(1, 0); }
+    }
+
+    public static Point Left
+    {
+        get { return new Point(-1, 0); }
     }
 
 }

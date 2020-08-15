@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Runtime.CompilerServices;
 
-public class NodePiece : MonoBehaviour
+public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     public int value;
     public Point index;
@@ -40,5 +42,22 @@ public class NodePiece : MonoBehaviour
     void UpdateName()
     {
         transform.name = "Node [" + index.x + " , " + index.y + "]";
+    }
+
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("Grab " + transform.name);
+        //throw new System.NotImplementedException();
+    }
+
+    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("Let Go " + transform.name);
+        //throw new System.NotImplementedException();
     }
 }
