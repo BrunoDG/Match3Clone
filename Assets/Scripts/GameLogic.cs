@@ -67,7 +67,34 @@ public class GameLogic : MonoBehaviour
     public void ResetPiece(NodePiece piece)
     {
         piece.ResetPositon();
+        piece.flipped = null;
         update.Add(piece);
+    }
+
+    public void FlipPieces(Point one, Point two)
+    {
+        if (GetValueAtPoint(one) < 0) return;
+
+        Node nodeOne = GetNodeAtPoint(one);
+        NodePiece pieceOne = nodeOne.GetPiece();
+
+        if (GetValueAtPoint(two) > 0)
+        {
+            Node nodeTwo = GetNodeAtPoint(two);
+            NodePiece pieceTwo = nodeTwo.GetPiece();
+            nodeOne.SetPiece(pieceTwo);
+            nodeTwo.SetPiece(pieceOne);
+
+            pieceOne.flipped = pieceTwo;
+            pieceTwo.flipped = pieceOne;
+
+            update.Add(pieceOne);
+            update.Add(pieceTwo);
+        } 
+        else
+        {
+            ResetPiece(pieceOne);
+        }
     }
 
     void VerifyBoard()
@@ -99,13 +126,16 @@ public class GameLogic : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
+                Node node = GetNodeAtPoint(new Point(x, y));
+             
                 int val = board[x, y].value;
                 if (val <= 0) continue;
                 GameObject p = Instantiate(nodePiece, gameBoard);
-                NodePiece node = p.GetComponent<NodePiece>();
+                NodePiece piece = p.GetComponent<NodePiece>();
                 RectTransform rect = p.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector2(36 + (72 * x), -36 - (72 * y));
-                node.Initialize(val, new Point(x, y), pieces[val - 1]);
+                piece.Initialize(val, new Point(x, y), pieces[val - 1]);
+                node.SetPiece(piece);
             }
         }
     }
@@ -262,6 +292,11 @@ public class GameLogic : MonoBehaviour
     {
         board[p.x, p.y].value = v;
     }
+
+    Node GetNodeAtPoint(Point p)
+    {
+        return board[p.x, p.y];
+    }
     
     int NewValue( ref List<int> remove)
     {
@@ -310,10 +345,24 @@ public class Node
 
     public int value;
     public Point index;
+    NodePiece piece;
 
     public Node(int v, Point i)
     {
         value = v;
         index = i;
+    }
+
+    public void SetPiece(NodePiece p)
+    {
+        piece = p;
+        value = (piece == null) ? 0 : piece.value;
+        if (piece == null) return;
+        piece.SetIndex(index);
+    }
+
+    public NodePiece GetPiece()
+    {
+        return piece;
     }
 }

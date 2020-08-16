@@ -68,15 +68,15 @@ public class MovePiece : MonoBehaviour
     {
         if (moving == null) return;
         Debug.Log("Dropped");
-        /*if (newIndex.Equals(moving.index))
+
+        if (!newIndex.Equals(moving.index)) // If piece is different to the other one
         {
-            moving.ResetPositon();
-        }*/
-        /// Flip the pieces around the game board
-        /// only if moving.index is different from newIndex
-        /// else
-        /// reset the piece back to original spot
-        game.ResetPiece(moving);
+            game.FlipPieces(moving.index, newIndex); // move the piece
+        }
+        else
+        {
+            game.ResetPiece(moving); // reset to original place
+        }
         moving = null;
     }
 }
