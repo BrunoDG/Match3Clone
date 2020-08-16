@@ -43,7 +43,7 @@ public class MovePiece : MonoBehaviour
                     add = (new Point((nDir.x > 0) ? 1 : -1, 0));
                 } else if (aDir.y > aDir.x) // Obtain the axis value as (0, 1) or (0, -1)
                 {
-                    add = (new Point(0, (nDir.y > 0) ? 1 : -1));
+                    add = (new Point(0, (nDir.y > 0) ? -1 : 1));
                 }
             }
             newIndex.Add(add);
@@ -51,7 +51,7 @@ public class MovePiece : MonoBehaviour
             Vector2 pos = game.GetPositionFromPoint(moving.index);
             if(!newIndex.Equals(moving.index))
             {
-                pos += Point.Multiply(add, 18).ToVector();
+                pos += Point.Multiply(new Point(add.x, -add.y), 18).ToVector();
             }
             moving.MovePositionTo(pos);
         }
@@ -71,7 +71,7 @@ public class MovePiece : MonoBehaviour
 
         if (!newIndex.Equals(moving.index)) // If piece is different to the other one
         {
-            game.FlipPieces(moving.index, newIndex); // move the piece
+            game.FlipPieces(moving.index, newIndex, true); // move the piece
         }
         else
         {

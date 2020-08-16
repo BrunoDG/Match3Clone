@@ -18,7 +18,7 @@ public class GameLogic : MonoBehaviour
     Node[,] board;
 
     List<NodePiece> update;
-
+    List<FlippedPieces> flipped;
 
     System.Random random;
     void Start()
@@ -38,14 +38,64 @@ public class GameLogic : MonoBehaviour
         for (int i = 0; i < updatedList.Count; i++)
         {
             NodePiece piece = updatedList[i];
+            FlippedPieces flip = GetFlipped(piece);
+            NodePiece flippedPiece = null;
+
+            List<Point> connected = IsConnected(piece.index, true);
+            bool wasFlipped = (flip != null);
+
+            if (wasFlipped) // if we flipped to make this update
+            {
+                flippedPiece = flip.GetOtherPiece(piece);
+                AddPoints(ref connected, IsConnected(flippedPiece.index, true));
+            }
+            if (connected.Count == 0) // if we didn't make a match
+            {
+                if (wasFlipped) // if we flipped
+                {
+                    FlipPieces(piece.index, flippedPiece.index, false); // flip back to previous position
+
+                }
+            } 
+            else // if we make a match
+            {
+                foreach (Point pnt in connected) // Remove the node pieces connected
+                {
+                    Node node = GetNodeAtPoint(pnt);
+                    NodePiece nodePiece = node.GetPiece();
+                    if (nodePiece != null)
+                    {
+                        nodePiece.gameObject.SetActive(false);
+                    }
+                    node.SetPiece(null);
+                }
+            }
+
+            flipped.Remove(flip); // remove the flip
             update.Remove(piece);
         }
     }
+
+    FlippedPieces GetFlipped(NodePiece p)
+    {
+        FlippedPieces flip = null;
+        for (int i = 0; i < flipped.Count; i++)
+        {
+            if (flipped[i].GetOtherPiece(p) != null)
+            {
+                flip = flipped[i];
+                break;
+            }
+        }
+        return flip;
+    }
+
     void StartGame()
     {
         string seed = GetRandomSeed();
         random = new System.Random(seed.GetHashCode());
         update = new List<NodePiece>();
+        flipped = new List<FlippedPieces>();
 
         InitializeBoard();
         VerifyBoard();
@@ -67,11 +117,11 @@ public class GameLogic : MonoBehaviour
     public void ResetPiece(NodePiece piece)
     {
         piece.ResetPositon();
-        piece.flipped = null;
+        //piece.flipped = null;
         update.Add(piece);
     }
 
-    public void FlipPieces(Point one, Point two)
+    public void FlipPieces(Point one, Point two, bool main)
     {
         if (GetValueAtPoint(one) < 0) return;
 
@@ -85,8 +135,10 @@ public class GameLogic : MonoBehaviour
             nodeOne.SetPiece(pieceTwo);
             nodeTwo.SetPiece(pieceOne);
 
-            pieceOne.flipped = pieceTwo;
-            pieceTwo.flipped = pieceOne;
+            if (main)
+            {
+                flipped.Add(new FlippedPieces(pieceOne, pieceTwo));
+            }
 
             update.Add(pieceOne);
             update.Add(pieceTwo);
@@ -364,5 +416,27 @@ public class Node
     public NodePiece GetPiece()
     {
         return piece;
+    }
+}
+
+[System.Serializable]
+public class FlippedPieces
+{
+    public NodePiece one;
+    public NodePiece two;
+
+    public FlippedPieces(NodePiece o, NodePiece t)
+    {
+        one = o;
+        two = t;
+    }
+
+    public NodePiece GetOtherPiece(NodePiece p)
+    {
+        if (p == one) return two;
+        
+        else if (p == two) return one;
+        
+        else return null;
     }
 }
