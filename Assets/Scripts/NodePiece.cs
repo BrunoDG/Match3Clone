@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Runtime.CompilerServices;
+using System.Data.Odbc;
 
 public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
@@ -15,6 +16,7 @@ public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     [HideInInspector]
     public RectTransform rect;
 
+    bool updating;
     Image img;
 
     public void Initialize(int v, Point p, Sprite piece)
@@ -36,7 +38,16 @@ public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     public void ResetPositon()
     {
-        pos = new Vector2(32 + (64 * index.x), -32 - (64 * index.y));
+        pos = new Vector2(36 + (72 * index.x), -36 - (72 * index.y));
+    }
+    public void MovePosition(Vector2 move)
+    {
+        rect.anchoredPosition += move * Time.deltaTime * 18f;
+    }
+
+    public void MovePositionTo(Vector2 move)
+    {
+        rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, move, Time.deltaTime * 18f);
     }
 
     void UpdateName()
@@ -44,20 +55,35 @@ public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         transform.name = "Node [" + index.x + " , " + index.y + "]";
     }
 
-    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
+    public bool UpdatePiece()
     {
-        throw new System.NotImplementedException();
+        if (Vector3.Distance(rect.anchoredPosition, pos) > 1)
+        {
+            MovePositionTo(pos);
+            updating = true;
+        } 
+        else
+        {
+            rect.anchoredPosition = pos;
+            updating = false;
+        }
+        return updating;
     }
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Grab " + transform.name);
-        //throw new System.NotImplementedException();
+        if (updating) return;
+        MovePiece.instance.MoveCurrentPiece(this);
+    }
+
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
+    {
+        MovePiece.instance.DropPiece();
     }
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Let Go " + transform.name);
+        
         //throw new System.NotImplementedException();
     }
 }

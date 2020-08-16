@@ -1071,8 +1071,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2060944562}
   - component: {fileID: 2060944563}
+  - component: {fileID: 2060944564}
   m_Layer: 0
-  m_Name: _match3
+  m_Name: GameLogic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1109,10 +1110,10 @@ MonoBehaviour:
     rows:
     - row: 0000000000000000
     - row: 0000000000000000
-    - row: 0000010101010000
-    - row: 0000010101010000
-    - row: 0000010101010000
-    - row: 0000010101010000
+    - row: 0000000000000000
+    - row: 0000000000000000
+    - row: 0000000000000000
+    - row: 0000000000000000
     - row: 0000000000000000
     - row: 0000000000000000
   pieces:
@@ -1124,3 +1125,15 @@ MonoBehaviour:
   gameBoard: {fileID: 719275786}
   nodePiece: {fileID: 7994864175112183464, guid: 9e35925f048be9e4c8807c00795957a4,
     type: 3}
+--- !u!114 &2060944564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060944561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83e5dc96d01f334cb612037f204b5c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

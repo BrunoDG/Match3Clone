@@ -13,10 +13,12 @@ public class GameLogic : MonoBehaviour
     [Header("Prefabs")]
     public GameObject nodePiece;
 
-
     int width = 8;
     int height = 8;
     Node[,] board;
+
+    List<NodePiece> update;
+
 
     System.Random random;
     void Start()
@@ -24,10 +26,26 @@ public class GameLogic : MonoBehaviour
         StartGame();
     }
 
+    void Update()
+    {
+        List<NodePiece> updatedList = new List<NodePiece>();
+        for (int i = 0; i < update.Count; i++)
+        {
+            NodePiece piece = update[i];
+            if (!piece.UpdatePiece()) updatedList.Add(piece);
+        }
+
+        for (int i = 0; i < updatedList.Count; i++)
+        {
+            NodePiece piece = updatedList[i];
+            update.Remove(piece);
+        }
+    }
     void StartGame()
     {
         string seed = GetRandomSeed();
         random = new System.Random(seed.GetHashCode());
+        update = new List<NodePiece>();
 
         InitializeBoard();
         VerifyBoard();
@@ -44,6 +62,12 @@ public class GameLogic : MonoBehaviour
                 board[x, y] = new Node((boardLayout.rows[y].row[x]) ? -1 : FillPiece(), new Point(x, y));
             }
         }
+    }
+
+    public void ResetPiece(NodePiece piece)
+    {
+        piece.ResetPositon();
+        update.Add(piece);
     }
 
     void VerifyBoard()
@@ -254,11 +278,6 @@ public class GameLogic : MonoBehaviour
         return available[random.Next(0, available.Count)];
     }
 
-    void Update()
-    {
-        
-    }
-
     string GetRandomSeed()
     {
         string seed = "";
@@ -271,6 +290,10 @@ public class GameLogic : MonoBehaviour
         return seed;
     }
 
+    public Vector2 GetPositionFromPoint(Point p)
+    {
+        return new Vector2(36 + (72 * p.x), -36 - (72 * p.y));
+    }
 }
 
 [System.Serializable]
