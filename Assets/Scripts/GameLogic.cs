@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameLogic : MonoBehaviour
 {
     public ArrayLayout boardLayout;
-    
+
     [Header("UI Elements")]
     public Sprite[] pieces;
     public RectTransform gameBoard;

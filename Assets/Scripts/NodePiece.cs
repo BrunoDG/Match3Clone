@@ -5,16 +5,19 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Runtime.CompilerServices;
 using System.Data.Odbc;
+using System.Runtime.ExceptionServices;
 
 public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     public int value;
     public Point index;
+    public bool selected = false;
+    public bool drag = false;
+
+    //List<Point>
 
     [HideInInspector]
     public Vector2 pos;
-    //[HideInInspector]
-    //public NodePiece flipped = null;
     [HideInInspector]
     public RectTransform rect;
 
@@ -76,17 +79,21 @@ public class NodePiece : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
         if (updating) return;
+        drag = true;
         MovePiece.instance.MoveCurrentPiece(this);
     }
 
     void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
     {
+        drag = false;
         MovePiece.instance.DropPiece();
     }
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        
-        //throw new System.NotImplementedException();
+        selected = true;
+        MovePiece.instance.CheckSelectedNodes(this);
     }
+
+
 }
